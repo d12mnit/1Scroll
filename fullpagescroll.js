@@ -1,7 +1,9 @@
-/**
- * @author D12mnIT
- * @version 1.0 beta
- */
+/*
+* @Author: v_mmmzzhang
+* @Date:   2016-02-24 13:21:30
+* @Last Modified by:   v_mmmzzhang
+* @Last Modified time: 2016-03-04 11:29:23
+*/
 
 var PageScroll = function(container, params) {
     var s = this;
@@ -37,6 +39,7 @@ var PageScroll = function(container, params) {
 
     //当前页面位置
     s.currentPageIndex = 0;
+    s.scroll_item.removeClass('active').eq(s.currentPageIndex).addClass('active');
     //页面缩放重定义
     $(window).resize(function(event) {
         s.scroll_height = parseInt(s.scroll_item.css('height'));
@@ -81,6 +84,7 @@ var PageScroll = function(container, params) {
                 var temp = s.wrapper.css('transform').split(',');
                 s.touches.currentPageY = parseInt(temp[temp.length - 1]);
                 s.touches.currentPageX = parseInt(temp[temp.length - 2]);
+                s.pauseAutoPlay();
             },
             move: function(istouch) {
                 if (!s.touches.isDrag) return;
@@ -147,6 +151,7 @@ var PageScroll = function(container, params) {
                 'transform': 'translate3d(' + targetPosition + 'px,0,0)'
             });
         }
+        s.scroll_item.removeClass('active').eq(s.currentPageIndex).addClass('active');
     }
     s.pagePositonFix = function() {
             if (s.touches.diff > s.scroll_height / 4 && s.currentPageIndex > 0) {
@@ -157,14 +162,32 @@ var PageScroll = function(container, params) {
                 s.slideTo(s.currentPageIndex, null);
             }
             s.touches.diff = 0;
+            s.setAutoPlay();
         }
-        //占坑
+    //占坑
     s.setAutoPlay = function() {
         /* body... */
+        s.autoplay = setInterval(function(){
+            if(s.currentPageIndex<s.scroll_number-1){
+                s.slideTo(++s.currentPageIndex,null);
+                console.log(s.currentPageIndex);
+            } else{
+                s.slideTo(0,null);
+                s.currentPageIndex = 0;
+            }
+        }, 3000);
     }
-
-    s.pasueAutoPlay = function() {
-
+    s.setAutoPlay();
+    s.pauseAutoPlay = function() {
+        clearInterval(s.autoplay);
     }
+    s.wheelListen = {
+        isWheel: false,
+        mouselisten: function(){
+            $(window).on('mousewheel', function(event) {
+                event.preventDefault();
 
+            });
+        }
+    }
 }
