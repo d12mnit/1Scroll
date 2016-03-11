@@ -2,7 +2,7 @@
 * @Author: v_mmmzzhang
 * @Date:   2016-02-24 13:21:30
 * @Last Modified by:   v_mmmzzhang
-* @Last Modified time: 2016-03-11 09:10:23
+* @Last Modified time: 2016-03-11 12:43:29
 */
 
 var PageScroll;
@@ -52,9 +52,9 @@ PageScroll = function (container, params) {
         s.container.addClass('vertical_scroll');
         s.isVertical = true;
     }
-    if (s.params.direction === 'horizonal') {
-        s.container.addClass('horizonal_scroll');
-        s.isHorizonal = true;
+    if (s.params.direction === 'horizontal') {
+        s.container.addClass('horizontal_scroll');
+        s.isHorizontal = true;
     }
     //容器宽度设置
     if (s.params.width || s.params.height) {
@@ -63,6 +63,8 @@ PageScroll = function (container, params) {
             height: s.params.height || (100 + '%')
         });
     }
+    s.scroll_Speed = s.params.speed || 500;
+    s.wrapper.css({'transition-duration': s.scroll_Speed/1000+'s'});
     //触摸及拖动数据保存
     s.touches = {
         startPageX: 0,
@@ -76,11 +78,12 @@ PageScroll = function (container, params) {
     s.slideListen = {
         start: function (istouch,event) {
             s.wrapper.addClass('isDrag');
+            if(s.params.loop)s.Loop.loopFixListen();
             s.touches.startPageX = istouch ? event.touches[0].pageX : event.pageX;
 
             s.touches.startPageY = istouch ? event.touches[0].pageY : event.pageY;
             s.touches.isDrag = true;
-
+            s.wrapper.css({'transition-duration': 0+'s'});
             var temp = s.wrapper.css('transform').split(',');
             s.touches.currentPageY = parseInt(temp[temp.length - 1]);
             s.touches.currentPageX = parseInt(temp[temp.length - 2]);
@@ -89,13 +92,13 @@ PageScroll = function (container, params) {
         move: function (istouch,event) {
             if (!s.touches.isDrag) return;
             if (istouch) {
-                s.touches.diff = s.isHorizonal ? event.touches[0].pageX - s.touches.startPageX : event.touches[0].pageY - s.touches.startPageY;
+                s.touches.diff = s.isHorizontal ? event.touches[0].pageX - s.touches.startPageX : event.touches[0].pageY - s.touches.startPageY;
             } else {
-                s.touches.diff = s.isHorizonal ? event.pageX - s.touches.startPageX : event.pageY - s.touches.startPageY;
+                s.touches.diff = s.isHorizontal ? event.pageX - s.touches.startPageX : event.pageY - s.touches.startPageY;
             }
             if (s.isDraggable) {
-                s.touches.endPosition = s.isHorizonal ? s.touches.diff + s.touches.currentPageX : s.touches.diff + s.touches.currentPageY;
-                if (s.isHorizonal) {
+                s.touches.endPosition = s.isHorizontal ? s.touches.diff + s.touches.currentPageX : s.touches.diff + s.touches.currentPageY;
+                if (s.isHorizontal) {
                     s.wrapper.css({
                         'transform': 'translate3d(' + s.touches.endPosition + 'px,0,0)'
                     });
@@ -110,6 +113,7 @@ PageScroll = function (container, params) {
             s.touches.isDrag = false;
             s.wrapper.removeClass('isDrag');
             s.pagePositonFix();
+            s.wrapper.css({'transition-duration': s.scroll_Speed/1000+'s'});
         }
     };
     //鼠标拖拽监听
@@ -140,7 +144,12 @@ PageScroll = function (container, params) {
         s.slideListen.end(event);
     });
     s.slideTo = function (targetIndex, speed) {
-        if (!s.isHorizonal) {
+        if(speed !== null ){
+            s.wrapper.css({'transition-duration': speed/1000+'s'});
+        } else{
+            s.wrapper.css({'transition-duration': s.scroll_Speed/1000+'s'});
+        }
+        if (!s.isHorizontal) {
             var targetPosition = -targetIndex * s.scroll_height;
             s.wrapper.css({
                 'transform': 'translate3d(0,' + targetPosition + 'px,0)'
@@ -168,17 +177,24 @@ PageScroll = function (container, params) {
     s.setAutoPlay = function () {
         /* body... */
         s.autoplay = setInterval(function () {
-            if (s.currentPageIndex < s.scroll_number - 1) {
-                s.slideTo(++s.currentPageIndex, null);
-            } else {
-                s.slideTo(0, null);
-                s.currentPageIndex = 0;
+            if(s.params.loop){
+                if (s.currentPageIndex < s.scroll_number - 1) {
+                    s.slideTo(++s.currentPageIndex, null);
+                    setTimeout(function(){
+                        s.Loop.loopFixListen();
+                    }, s.scroll_Speed+100);
+                }
+            }else{
+                if (s.currentPageIndex < s.scroll_number - 1) {
+                    s.slideTo(++s.currentPageIndex, null);
+                }
             }
         }, 3000);
     };
-    s.setAutoPlay();
+    if(s.params.autoPlay)s.setAutoPlay();
+
     s.pauseAutoPlay = function () {
-        clearInterval(s.autoplay);
+        if(s.autoplay)clearInterval(s.autoplay);
     };
     s.wheelListen = {
         isWheel: false,
@@ -187,13 +203,13 @@ PageScroll = function (container, params) {
             $(window).on('mousewheel DOMMouseScroll', function (event) {
                 event.preventDefault();
                 event = event.originalEvent;
+
                 delta = event.wheelDelta || -event.detail;
                 if(!_this.isWheel){
                     _this.isWheel = true;
                     s.pauseAutoPlay();
                     if (delta > 0) {
                         /*滚轮向上滚动*/
-                        console.log(delta);
                         if(s.currentPageIndex>0){
                             s.slideTo(--s.currentPageIndex,null);
                         }
@@ -206,10 +222,33 @@ PageScroll = function (container, params) {
                     setTimeout(function(){
                         _this.isWheel = false;
                         s.setAutoPlay();
-                    },500);
+                        if(s.params.loop)s.Loop.loopFixListen();
+                    },s.scroll_Speed+100);
                 }
             });
         }
     };
-    s.wheelListen.mouselisten();
+    if(s.params.mousewheel)s.wheelListen.mouselisten();
+    s.Loop = {
+        createLoop: function () {
+            var slides = s.scroll_item;
+            s.wrapper.append(slides.eq(0).clone(true).removeClass('active').addClass('duplicated'));
+            s.wrapper.prepend(slides.eq(s.scroll_number-1).clone(true).removeClass('active').addClass('duplicated'));
+            s.scroll_item = s.wrapper.children('.scroll-page');
+            s.scroll_number = s.scroll_item.length;
+            this.loopFix(1);
+        },
+        loopFix: function(index){
+            s.currentPageIndex = index;
+            s.slideTo(index,0);
+        },
+        loopFixListen: function(){
+            if(s.currentPageIndex == s.scroll_number-1){
+                s.Loop.loopFix(1);
+            } else if(s.currentPageIndex == 0){
+                s.Loop.loopFix(s.scroll_number-2);
+            }
+        }
+    };
+    if(s.params.loop)s.Loop.createLoop();
 };

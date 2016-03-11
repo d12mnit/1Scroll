@@ -22,11 +22,13 @@ HTML结构如下
 <script src="fullpagescroll.js"></script>
 <script>
     var init = new PageScroll('.container',{
-        direction: 'vertical',
-        draggable: true,
-        mouseWheel: true,
-        autoPlay: true
+        direction: 'vertical',   //设置滚动方向  'vertical'垂直,'horizontal',水平
+        draggable: true,    //是否允许拖拽切换
+        autoPlay: true,     //是否自动轮播
+        mousewheel: true,   //是否允许鼠标滚轮滚动
+        speed: 500,    //毫秒
+        loop: false      //是否无限循环
     })
 </script>
 ```
-正在添加并完善无缝loop,与pagination按钮等功能，并计划加入动态生成html结构，方便模板化使用.
+正在完善无缝loop,与pagination按钮等功能，并计划加入动态生成html结构，方便模板化使用.
