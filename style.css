@@ -1,0 +1,105 @@
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: Helvetica;
+  font-size: 36px;
+  height: 100%;
+}
+
+body {
+  background-color: #eee;
+  overflow: hidden;
+}
+
+.container,
+.wrapper,
+.scroll-page {
+  position: relative;
+  display: flex;
+  display: -webkit-flex;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  top: 50%;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+  overflow: hidden;
+  text-align: center;
+}
+
+.wrapper {
+  -webkit-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transition: all .5s cubic-bezier(.49,.19,.14,.75);
+  -o-transition: all .5s cubic-bezier(.49,.19,.14,.75);
+  transition: all .5s cubic-bezier(.49,.19,.14,.75);
+}
+
+.wrapper.isDrag {
+  -webkit-transition: all 0s;
+  -o-transition: all 0s;
+  transition: all 0s;
+}
+
+.scroll-page {
+  flex-shrink: 0;
+  -webkit-flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+
+.vertical_scroll .wrapper {
+  flex-direction: column;
+}
+/*
+.scroll-page:first-of-type {
+  background: url(img/0ea2b07707fbbe84.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-color: #fff;
+}
+
+.scroll-page:nth-of-type(2) {
+  background: url(img/1aa1fa8a4ff187ce.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-color: #2196F3;
+}
+
+.scroll-page:nth-of-type(3) {
+  background: url(img/52113862452469c0.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-color: #009688;
+}
+
+.scroll-page:nth-of-type(4) {
+  background: url(img/772a8cd9c93f90f6.png) no-repeat center center;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-color: #4CAF50;
+}
+
+.scroll-page:nth-of-type(5) {
+  background: url(img/9aba97081694d161.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-color: #FF5722;
+}
+*/

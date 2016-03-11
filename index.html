@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Demo Scroll</title>
+
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <div class="scroll-page">1</div>
+            <div class="scroll-page">2</div>
+            <div class="scroll-page">3</div>
+            <div class="scroll-page">4</div>
+            <div class="scroll-page">5</div>
+        </div>
+    </div>
+<script src="jquery-2.2.1.min.js"></script>
+<script src="fullpagescroll.js"></script>
+<script>
+    var init = new PageScroll('.container',{
+        direction: 'vertical',   //设置滚动方向  'vertical'垂直,'horizontal',水平
+        draggable: true,    //是否允许拖拽切换
+        autoPlay: true,     //是否自动轮播
+        mousewheel: true,   //是否允许鼠标滚轮滚动
+        speed: 500,    //毫秒
+        loop: false      //是否无限循环
+    })
+</script>
+</body>
+</html>
