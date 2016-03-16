@@ -2,7 +2,7 @@
 * @Author: v_mmmzzhang
 * @Date:   2016-02-24 13:21:30
 * @Last Modified by:   v_mmmzzhang
-* @Last Modified time: 2016-03-11 16:02:02
+* @Last Modified time: 2016-03-16 09:22:01
 */
 
 var PageScroll;
@@ -22,7 +22,13 @@ PageScroll = function (container, params) {
     s.params = params;
     //Wrapper
     s.wrapper = s.params.wrapperClass ? s.container.children('.' + s.params.wrapperClass) : s.container.children('.wrapper');
-
+    //容器宽度设置
+    if (s.params.width || s.params.height) {
+        s.container.css({
+            width: s.params.width || (100 + '%'),
+            height: s.params.height || (100 + '%')
+        });
+    }
     if (s.params.pagination) {
         s.paginationInit();
     }
@@ -47,7 +53,7 @@ PageScroll = function (container, params) {
         s.scroll_width = parseInt(s.scroll_item.css('width'));
         s.slideTo(s.currentPageIndex, null);
     });
-    //滚平方向判断
+    //滚屏方向判断
     if (s.params.direction === 'vertical' || !s.params.direction) {
         s.container.addClass('vertical_scroll');
         s.isVertical = true;
@@ -56,13 +62,7 @@ PageScroll = function (container, params) {
         s.container.addClass('horizontal_scroll');
         s.isHorizontal = true;
     }
-    //容器宽度设置
-    if (s.params.width || s.params.height) {
-        s.container.css({
-            width: s.params.width || (100 + '%'),
-            height: s.params.height || (100 + '%')
-        });
-    }
+
     s.scroll_Speed = s.params.speed || 500;
     s.wrapper.css({'transition-duration': s.scroll_Speed/1000+'s'});
     //触摸及拖动数据保存

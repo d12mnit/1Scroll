@@ -22,6 +22,8 @@ HTML结构如下
 <script src="fullpagescroll.js"></script>
 <script>
     var init = new PageScroll('.container',{
+        width: 700,                 //容器宽度，不设置默认100%;
+        height: 1300,               //容器高度, 不设置默认100%;    也可通过css直接设置
         direction: 'vertical',   //设置滚动方向  'vertical'垂直,'horizontal',水平
         draggable: true,    //是否允许拖拽切换
         autoPlay: true,     //是否自动轮播
@@ -31,4 +33,4 @@ HTML结构如下
     })
 </script>
 ```
-正在完善无缝loop,与pagination按钮等功能，并计划加入动态生成html结构，方便模板化使用.
+正在完善pagination按钮功能，并计划加入动态生成html结构，方便模板化使用.
