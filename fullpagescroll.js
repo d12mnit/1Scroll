@@ -2,7 +2,7 @@
 * @Author: v_mmmzzhang
 * @Date:   2016-02-24 13:21:30
 * @Last Modified by:   v_mmmzzhang
-* @Last Modified time: 2016-03-16 09:22:01
+* @Last Modified time: 2016-03-21 10:21:44
 */
 
 var PageScroll;
@@ -28,9 +28,6 @@ PageScroll = function (container, params) {
             width: s.params.width || (100 + '%'),
             height: s.params.height || (100 + '%')
         });
-    }
-    if (s.params.pagination) {
-        s.paginationInit();
     }
     if (s.params.scrollButton) {
         s.prevButton = s.container.find('.prevButton');
@@ -171,7 +168,7 @@ PageScroll = function (container, params) {
             s.slideTo(s.currentPageIndex, null);
         }
         s.touches.diff = 0;
-        s.setAutoPlay();
+        if(s.params.autoPlay)s.setAutoPlay();
     };
     //占坑
     s.setAutoPlay = function () {
@@ -251,4 +248,27 @@ PageScroll = function (container, params) {
         }
     };
     if(s.params.loop)s.Loop.createLoop();
+    s.pagination = {
+        init: function(){
+            this.createPagination();
+        },
+        createPagination: function () {
+            var num = s.params.loop ? s.scroll_number-2 : s.scroll_number;
+            var wrap = $('<div></div>');
+            while(num--){
+                wrap.append('<span></span>');
+            }
+            wrap.addClass('pagination');
+            if(s.params.direction == 'vertical'){
+                wrap.addClass('vertical');
+            }else{
+                wrap.addClass('horizontal');
+            }
+            s.container.append(wrap);
+        }
+    };
+    if (s.params.pagination) {
+        s.pagination.init();
+    }
+
 };
