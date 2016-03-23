@@ -2,7 +2,7 @@
 * @Author: v_mmmzzhang
 * @Date:   2016-02-24 13:21:30
 * @Last Modified by:   v_mmmzzhang
-* @Last Modified time: 2016-03-21 10:21:44
+* @Last Modified time: 2016-03-23 15:39:21
 */
 
 var PageScroll;
@@ -110,6 +110,7 @@ PageScroll = function (container, params) {
             s.touches.isDrag = false;
             s.wrapper.removeClass('isDrag');
             s.pagePositonFix();
+            s.params.loop ? s.pagination.setChange(s.currentPageIndex-1) :s.pagination.setChange(s.currentPageIndex);
             s.wrapper.css({'transition-duration': s.scroll_Speed/1000+'s'});
         }
     };
@@ -179,11 +180,13 @@ PageScroll = function (container, params) {
                     s.slideTo(++s.currentPageIndex, null);
                     setTimeout(function(){
                         s.Loop.loopFixListen();
+                        s.pagination.setChange(s.currentPageIndex-1);
                     }, s.scroll_Speed+100);
                 }
             }else{
                 if (s.currentPageIndex < s.scroll_number - 1) {
                     s.slideTo(++s.currentPageIndex, null);
+                    s.pagination.setChange(s.currentPageIndex);
                 }
             }
         }, 3000);
@@ -209,11 +212,13 @@ PageScroll = function (container, params) {
                         /*滚轮向上滚动*/
                         if(s.currentPageIndex>0){
                             s.slideTo(--s.currentPageIndex,null);
+                            s.params.loop ? s.pagination.setChange(s.currentPageIndex-1) :s.pagination.setChange(s.currentPageIndex);
                         }
                     } else{
                         /*滚轮向下滚动*/
                         if(s.currentPageIndex< s.scroll_number-1){
                             s.slideTo(++s.currentPageIndex,null);
+                            s.params.loop ? s.pagination.setChange(s.currentPageIndex-1) :s.pagination.setChange(s.currentPageIndex);
                         }
                     }
                     setTimeout(function(){
@@ -251,6 +256,8 @@ PageScroll = function (container, params) {
     s.pagination = {
         init: function(){
             this.createPagination();
+            this.listen();
+            this.setChange(0);
         },
         createPagination: function () {
             var num = s.params.loop ? s.scroll_number-2 : s.scroll_number;
@@ -265,10 +272,32 @@ PageScroll = function (container, params) {
                 wrap.addClass('horizontal');
             }
             s.container.append(wrap);
+        },
+        listen: function () {
+            var wrap = s.container.find('.pagination');
+            wrap.on('click', 'span', function(event) {
+                event.preventDefault();
+                s.pauseAutoPlay();
+                var index = $(this).index();
+                index = s.params.loop ? index+1 : index;
+                s.currentPageIndex = index;
+                wrap.find('span').removeClass('selected');
+                $(this).addClass('selected');
+                s.slideTo(index,null);
+                setTimeout(function(){
+                    s.setAutoPlay();
+                },s.scroll_Speed);
+            });
+        },
+        setChange: function(index){
+            console.log(index);
+            var num = s.params.loop ? s.scroll_number-2 : s.scroll_number;
+            var btn = s.container.find('.pagination span');
+            btn.removeClass('selected');
+            index == num ? btn.eq(0).addClass('selected') : btn.eq(index).addClass('selected');
         }
     };
     if (s.params.pagination) {
         s.pagination.init();
     }
-
 };

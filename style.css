@@ -93,8 +93,16 @@ body {
   height:15px;
   width: 15px;
   margin: 5px 5px;
+  border: 2px solid #1177ff;
   border-radius: 50%;
   background-color: #1177ff;
+  cursor: pointer;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.pagination span.selected{
+  background-color: #fff;
 }
 /*
 .scroll-page:first-of-type {
