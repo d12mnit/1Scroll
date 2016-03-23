@@ -1,6 +1,10 @@
 # 1Scroll
 个人用快速构建全屏滚动及轮播插件，完善中
 
+#### DEMO
+
+[点击预览](http://d12mnit.github.io/1Scroll/)
+
 #### 如何使用
 HTML结构如下
 ``` html
