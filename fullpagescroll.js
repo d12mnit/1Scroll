@@ -6,14 +6,14 @@
 */
 
 var PageScroll;
-PageScroll = function (container, params) {
+PageScroll = function(container, params) {
     var s = this;
 
     s.container = $(container);
     if (s.container.length === 0) return;
     if (s.container.length > 1) {
         var tempArr = [];
-        s.container.each(function () {
+        s.container.each(function() {
             var container = this;
             tempArr.push(new PageScroll(container, params));
         });
@@ -45,7 +45,7 @@ PageScroll = function (container, params) {
     s.currentPageIndex = 0;
     s.scroll_item.removeClass('active').eq(s.currentPageIndex).addClass('active');
     //页面缩放重定义
-    $(window).resize(function (event) {
+    $(window).resize(function(event) {
         s.scroll_height = parseInt(s.scroll_item.css('height'));
         s.scroll_width = parseInt(s.scroll_item.css('width'));
         s.slideTo(s.currentPageIndex, null);
@@ -61,7 +61,7 @@ PageScroll = function (container, params) {
     }
 
     s.scroll_Speed = s.params.speed || 500;
-    s.wrapper.css({'transition-duration': s.scroll_Speed/1000+'s'});
+    s.wrapper.css({ 'transition-duration': s.scroll_Speed / 1000 + 's' });
     //触摸及拖动数据保存
     s.touches = {
         startPageX: 0,
@@ -73,20 +73,20 @@ PageScroll = function (container, params) {
         isDrag: false
     };
     s.slideListen = {
-        start: function (istouch,event) {
+        start: function(istouch, event) {
             s.wrapper.addClass('isDrag');
-            if(s.params.loop)s.Loop.loopFixListen();
+            if (s.params.loop) s.Loop.loopFixListen();
             s.touches.startPageX = istouch ? event.touches[0].pageX : event.pageX;
 
             s.touches.startPageY = istouch ? event.touches[0].pageY : event.pageY;
             s.touches.isDrag = true;
-            s.wrapper.css({'transition-duration': 0+'s'});
+            s.wrapper.css({ 'transition-duration': 0 + 's' });
             var temp = s.wrapper.css('transform').split(',');
             s.touches.currentPageY = parseInt(temp[temp.length - 1]);
             s.touches.currentPageX = parseInt(temp[temp.length - 2]);
             s.pauseAutoPlay();
         },
-        move: function (istouch,event) {
+        move: function(istouch, event) {
             if (!s.touches.isDrag) return;
             if (istouch) {
                 s.touches.diff = s.isHorizontal ? event.touches[0].pageX - s.touches.startPageX : event.touches[0].pageY - s.touches.startPageY;
@@ -106,46 +106,46 @@ PageScroll = function (container, params) {
                 }
             }
         },
-        end: function (event) {
+        end: function(event) {
             s.touches.isDrag = false;
             s.wrapper.removeClass('isDrag');
             s.pagePositonFix();
-            s.params.loop ? s.pagination.setChange(s.currentPageIndex-1) :s.pagination.setChange(s.currentPageIndex);
-            s.wrapper.css({'transition-duration': s.scroll_Speed/1000+'s'});
+            s.params.loop ? s.pagination.setChange(s.currentPageIndex - 1) : s.pagination.setChange(s.currentPageIndex);
+            s.wrapper.css({ 'transition-duration': s.scroll_Speed / 1000 + 's' });
         }
     };
     //鼠标拖拽监听
-    s.wrapper.on('mousedown', function (event) {
+    s.wrapper.on('mousedown', function(event) {
         event.preventDefault();
-        s.slideListen.start(false,event);
-    }).on('mousemove', function (event) {
+        s.slideListen.start(false, event);
+    }).on('mousemove', function(event) {
         event.preventDefault();
-        s.slideListen.move(false,event);
-    }).on('mouseup', function (event) {
+        s.slideListen.move(false, event);
+    }).on('mouseup', function(event) {
         event.preventDefault();
         s.slideListen.end(event);
     });
     //Touch 事件监听
-    s.wrapper.on('touchstart', function (event) {
+    s.wrapper.on('touchstart', function(event) {
         event = event.originalEvent;
         event.preventDefault();
         if (event.touches.length == 1) {
-            s.slideListen.start(true,event);
+            s.slideListen.start(true, event);
         }
-    }).on('touchmove', function (event) {
+    }).on('touchmove', function(event) {
         event = event.originalEvent;
         event.preventDefault();
-        s.slideListen.move(true,event);
-    }).on('touchend', function (event) {
+        s.slideListen.move(true, event);
+    }).on('touchend', function(event) {
         event = event.originalEvent;
         event.preventDefault();
         s.slideListen.end(event);
     });
-    s.slideTo = function (targetIndex, speed) {
-        if(speed !== null ){
-            s.wrapper.css({'transition-duration': speed/1000+'s'});
-        } else{
-            s.wrapper.css({'transition-duration': s.scroll_Speed/1000+'s'});
+    s.slideTo = function(targetIndex, speed) {
+        if (speed !== null) {
+            s.wrapper.css({ 'transition-duration': speed / 1000 + 's' });
+        } else {
+            s.wrapper.css({ 'transition-duration': s.scroll_Speed / 1000 + 's' });
         }
         if (!s.isHorizontal) {
             var targetPosition = -targetIndex * s.scroll_height;
@@ -160,7 +160,7 @@ PageScroll = function (container, params) {
         }
         s.scroll_item.removeClass('active').eq(s.currentPageIndex).addClass('active');
     };
-    s.pagePositonFix = function () {
+    s.pagePositonFix = function() {
         if (s.touches.diff > s.scroll_height / 4 && s.currentPageIndex > 0) {
             s.slideTo(--s.currentPageIndex, null);
         } else if (s.touches.diff < -s.scroll_height / 4 && s.currentPageIndex < s.scroll_number - 1) {
@@ -169,21 +169,21 @@ PageScroll = function (container, params) {
             s.slideTo(s.currentPageIndex, null);
         }
         s.touches.diff = 0;
-        if(s.params.autoPlay)s.setAutoPlay();
+        if (s.params.autoPlay) s.setAutoPlay();
     };
     //占坑
-    s.setAutoPlay = function () {
+    s.setAutoPlay = function() {
         /* body... */
-        s.autoplay = setInterval(function () {
-            if(s.params.loop){
+        s.autoplay = setInterval(function() {
+            if (s.params.loop) {
                 if (s.currentPageIndex < s.scroll_number - 1) {
                     s.slideTo(++s.currentPageIndex, null);
-                    setTimeout(function(){
+                    setTimeout(function() {
                         s.Loop.loopFixListen();
-                        s.pagination.setChange(s.currentPageIndex-1);
-                    }, s.scroll_Speed+100);
+                        s.pagination.setChange(s.currentPageIndex - 1);
+                    }, s.scroll_Speed + 100);
                 }
-            }else{
+            } else {
                 if (s.currentPageIndex < s.scroll_number - 1) {
                     s.slideTo(++s.currentPageIndex, null);
                     s.pagination.setChange(s.currentPageIndex);
@@ -191,107 +191,107 @@ PageScroll = function (container, params) {
             }
         }, 3000);
     };
-    if(s.params.autoPlay)s.setAutoPlay();
+    if (s.params.autoPlay) s.setAutoPlay();
 
-    s.pauseAutoPlay = function () {
-        if(s.autoplay)clearInterval(s.autoplay);
+    s.pauseAutoPlay = function() {
+        if (s.autoplay) clearInterval(s.autoplay);
     };
     s.wheelListen = {
         isWheel: false,
-        mouselisten: function () {
+        mouselisten: function() {
             var _this = this;
-            $(window).on('mousewheel DOMMouseScroll', function (event) {
+            $(window).on('mousewheel DOMMouseScroll', function(event) {
                 event.preventDefault();
                 event = event.originalEvent;
 
                 delta = event.wheelDelta || -event.detail;
-                if(!_this.isWheel){
+                if (!_this.isWheel) {
                     _this.isWheel = true;
                     s.pauseAutoPlay();
                     if (delta > 0) {
                         /*滚轮向上滚动*/
-                        if(s.currentPageIndex>0){
-                            s.slideTo(--s.currentPageIndex,null);
-                            s.params.loop ? s.pagination.setChange(s.currentPageIndex-1) :s.pagination.setChange(s.currentPageIndex);
+                        if (s.currentPageIndex > 0) {
+                            s.slideTo(--s.currentPageIndex, null);
+                            s.params.loop ? s.pagination.setChange(s.currentPageIndex - 1) : s.pagination.setChange(s.currentPageIndex);
                         }
-                    } else{
+                    } else {
                         /*滚轮向下滚动*/
-                        if(s.currentPageIndex< s.scroll_number-1){
-                            s.slideTo(++s.currentPageIndex,null);
-                            s.params.loop ? s.pagination.setChange(s.currentPageIndex-1) :s.pagination.setChange(s.currentPageIndex);
+                        if (s.currentPageIndex < s.scroll_number - 1) {
+                            s.slideTo(++s.currentPageIndex, null);
+                            s.params.loop ? s.pagination.setChange(s.currentPageIndex - 1) : s.pagination.setChange(s.currentPageIndex);
                         }
                     }
-                    setTimeout(function(){
+                    setTimeout(function() {
                         _this.isWheel = false;
                         s.setAutoPlay();
-                        if(s.params.loop)s.Loop.loopFixListen();
-                    },s.scroll_Speed+100);
+                        if (s.params.loop) s.Loop.loopFixListen();
+                    }, s.scroll_Speed + 100);
                 }
             });
         }
     };
-    if(s.params.mousewheel)s.wheelListen.mouselisten();
+    if (s.params.mousewheel) s.wheelListen.mouselisten();
     s.Loop = {
-        createLoop: function () {
+        createLoop: function() {
             var slides = s.scroll_item;
             s.wrapper.append(slides.eq(0).clone(true).removeClass('active').addClass('duplicated'));
-            s.wrapper.prepend(slides.eq(s.scroll_number-1).clone(true).removeClass('active').addClass('duplicated'));
+            s.wrapper.prepend(slides.eq(s.scroll_number - 1).clone(true).removeClass('active').addClass('duplicated'));
             s.scroll_item = s.wrapper.children('.scroll-page');
             s.scroll_number = s.scroll_item.length;
             this.loopFix(1);
         },
-        loopFix: function(index){
+        loopFix: function(index) {
             s.currentPageIndex = index;
-            s.slideTo(index,0);
+            s.slideTo(index, 0);
         },
-        loopFixListen: function(){
-            if(s.currentPageIndex == s.scroll_number-1){
+        loopFixListen: function() {
+            if (s.currentPageIndex == s.scroll_number - 1) {
                 s.Loop.loopFix(1);
-            } else if(s.currentPageIndex == 0){
-                s.Loop.loopFix(s.scroll_number-2);
+            } else if (s.currentPageIndex == 0) {
+                s.Loop.loopFix(s.scroll_number - 2);
             }
         }
     };
-    if(s.params.loop)s.Loop.createLoop();
+    if (s.params.loop) s.Loop.createLoop();
     s.pagination = {
-        init: function(){
+        init: function() {
             this.createPagination();
             this.listen();
             this.setChange(0);
         },
-        createPagination: function () {
-            var num = s.params.loop ? s.scroll_number-2 : s.scroll_number;
+        createPagination: function() {
+            var num = s.params.loop ? s.scroll_number - 2 : s.scroll_number;
             var wrap = $('<div></div>');
-            while(num--){
+            while (num--) {
                 wrap.append('<span></span>');
             }
             wrap.addClass('pagination');
-            if(s.params.direction == 'vertical'){
+            if (s.params.direction == 'vertical') {
                 wrap.addClass('vertical');
-            }else{
+            } else {
                 wrap.addClass('horizontal');
             }
             s.container.append(wrap);
         },
-        listen: function () {
+        listen: function() {
             var wrap = s.container.find('.pagination');
             wrap.on('click', 'span', function(event) {
                 event.preventDefault();
                 s.pauseAutoPlay();
                 var index = $(this).index();
-                index = s.params.loop ? index+1 : index;
+                index = s.params.loop ? index + 1 : index;
                 s.currentPageIndex = index;
                 wrap.find('span').removeClass('selected');
                 $(this).addClass('selected');
-                s.slideTo(index,null);
-                setTimeout(function(){
+                s.slideTo(index, null);
+                setTimeout(function() {
                     s.setAutoPlay();
-                },s.scroll_Speed);
+                }, s.scroll_Speed);
             });
         },
-        setChange: function(index){
+        setChange: function(index) {
             console.log(index);
-            var num = s.params.loop ? s.scroll_number-2 : s.scroll_number;
+            var num = s.params.loop ? s.scroll_number - 2 : s.scroll_number;
             var btn = s.container.find('.pagination span');
             btn.removeClass('selected');
             index == num ? btn.eq(0).addClass('selected') : btn.eq(index).addClass('selected');
