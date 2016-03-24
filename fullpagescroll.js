@@ -1,9 +1,9 @@
 /*
-* @Author: v_mmmzzhang
-* @Date:   2016-02-24 13:21:30
-* @Last Modified by:   v_mmmzzhang
-* @Last Modified time: 2016-03-23 15:39:21
-*/
+ * @Author: v_mmmzzhang
+ * @Date:   2016-02-24 13:21:30
+ * @Last Modified by:   v_mmmzzhang
+ * @Last Modified time: 2016-03-24 09:34:23
+ */
 
 var PageScroll;
 PageScroll = function(container, params) {
@@ -61,7 +61,9 @@ PageScroll = function(container, params) {
     }
 
     s.scroll_Speed = s.params.speed || 500;
-    s.wrapper.css({ 'transition-duration': s.scroll_Speed / 1000 + 's' });
+    s.wrapper.css({
+        'transition-duration': s.scroll_Speed / 1000 + 's'
+    });
     //触摸及拖动数据保存
     s.touches = {
         startPageX: 0,
@@ -80,7 +82,9 @@ PageScroll = function(container, params) {
 
             s.touches.startPageY = istouch ? event.touches[0].pageY : event.pageY;
             s.touches.isDrag = true;
-            s.wrapper.css({ 'transition-duration': 0 + 's' });
+            s.wrapper.css({
+                'transition-duration': 0 + 's'
+            });
             var temp = s.wrapper.css('transform').split(',');
             s.touches.currentPageY = parseInt(temp[temp.length - 1]);
             s.touches.currentPageX = parseInt(temp[temp.length - 2]);
@@ -111,7 +115,9 @@ PageScroll = function(container, params) {
             s.wrapper.removeClass('isDrag');
             s.pagePositonFix();
             s.params.loop ? s.pagination.setChange(s.currentPageIndex - 1) : s.pagination.setChange(s.currentPageIndex);
-            s.wrapper.css({ 'transition-duration': s.scroll_Speed / 1000 + 's' });
+            s.wrapper.css({
+                'transition-duration': s.scroll_Speed / 1000 + 's'
+            });
         }
     };
     //鼠标拖拽监听
@@ -143,9 +149,13 @@ PageScroll = function(container, params) {
     });
     s.slideTo = function(targetIndex, speed) {
         if (speed !== null) {
-            s.wrapper.css({ 'transition-duration': speed / 1000 + 's' });
+            s.wrapper.css({
+                'transition-duration': speed / 1000 + 's'
+            });
         } else {
-            s.wrapper.css({ 'transition-duration': s.scroll_Speed / 1000 + 's' });
+            s.wrapper.css({
+                'transition-duration': s.scroll_Speed / 1000 + 's'
+            });
         }
         if (!s.isHorizontal) {
             var targetPosition = -targetIndex * s.scroll_height;
