@@ -2,9 +2,9 @@
  * @Author: v_mmmzzhang
  * @Date:   2016-02-24 13:21:30
  * @Last Modified by:   v_mmmzzhang
- * @Last Modified time: 2016-03-24 09:34:23
+ * @Last Modified time: 2016-04-19 09:37:47
  */
-
+'use strict';
 var PageScroll;
 PageScroll = function(container, params) {
     var s = this;
@@ -110,7 +110,7 @@ PageScroll = function(container, params) {
                 }
             }
         },
-        end: function(event) {
+        end: function() {
             s.touches.isDrag = false;
             s.wrapper.removeClass('isDrag');
             s.pagePositonFix();
@@ -214,7 +214,7 @@ PageScroll = function(container, params) {
                 event.preventDefault();
                 event = event.originalEvent;
 
-                delta = event.wheelDelta || -event.detail;
+                var delta = event.wheelDelta || -event.detail;
                 if (!_this.isWheel) {
                     _this.isWheel = true;
                     s.pauseAutoPlay();
@@ -233,7 +233,7 @@ PageScroll = function(container, params) {
                     }
                     setTimeout(function() {
                         _this.isWheel = false;
-                        s.setAutoPlay();
+                        if (s.params.autoPlay) s.setAutoPlay();
                         if (s.params.loop) s.Loop.loopFixListen();
                     }, s.scroll_Speed + 100);
                 }
@@ -257,7 +257,7 @@ PageScroll = function(container, params) {
         loopFixListen: function() {
             if (s.currentPageIndex == s.scroll_number - 1) {
                 s.Loop.loopFix(1);
-            } else if (s.currentPageIndex == 0) {
+            } else if (s.currentPageIndex === 0) {
                 s.Loop.loopFix(s.scroll_number - 2);
             }
         }
